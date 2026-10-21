@@ -1,0 +1,4 @@
+pymupdf>=2.0
+rapidocr>=3.10
+onnxruntime
+numpy
