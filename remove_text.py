@@ -378,7 +378,11 @@ def parse_colour(value):
     return tuple(int(hex_value[i:i + 2], 16) / 255 for i in (0, 2, 4))
 
 
-def clean_pdf(src, dst, targets, engine, args):
+def clean_pdf(src, dst, targets, engine, args, log=print, progress=None):
+    """Remove the targets from every page of src and save to dst; returns the number of matches.
+
+    Messages go to `log`, and `progress(page, page_count)` is called after each page.
+    """
     doc = pymupdf.open(src)
     total = 0
     for page in doc:
@@ -390,12 +394,12 @@ def clean_pdf(src, dst, targets, engine, args):
             rgb = render(page, dpi)
             words = read_words(engine, rgb)
             if args.show_text and attempt == 0:
-                print(f"--- page {page.number + 1} text ---")
+                log(f"--- page {page.number + 1} text ---")
                 lines = {}
                 for word in words:
                     lines.setdefault(word.line, []).append(word.text)
                 for line in lines.values():
-                    print("   ", " ".join(line))
+                    log("    " + " ".join(line))
 
             matches = [m for target in targets for m in find_matches(words, target, args.similarity)]
             if not matches:
@@ -412,11 +416,13 @@ def clean_pdf(src, dst, targets, engine, args):
 
         total += len(removed)
         verb = "would remove" if args.dry_run else "removed"
-        print(f"  page {page.number + 1}/{doc.page_count}: {verb} {len(removed)}")
+        log(f"  page {page.number + 1}/{doc.page_count}: {verb} {len(removed)}")
         for match in removed:
             note = "" if match.score == 1 else f"  (~{match.score:.0%} like \"{match.target}\")"
             where = "  [text layer]" if match.in_text_layer else ""
-            print(f"      \"{match.text}\"{note}{where}")
+            log(f"      \"{match.text}\"{note}{where}")
+        if progress:
+            progress(page.number + 1, doc.page_count)
 
     if not args.dry_run:
         doc.save(dst, garbage=3, deflate=True)

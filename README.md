@@ -38,6 +38,17 @@ Then open `D:\Qbank Question\test_sample_cleaned.pdf`. Your original file is nev
 
 ## Usage
 
+### Window (easiest)
+
+Double-click **`PDFScript.pyw`**. If it opens in a text editor instead, right-click it and choose *Open with → Python*.
+
+1. Choose a PDF with **File...**, or a whole folder of PDFs with **Folder...**.
+2. Type the words or sentences to delete, one per line.
+3. Press **Preview** to see what would be deleted. Nothing is written.
+4. Press **Remove text**, then **Open output folder** to find `NAME_cleaned.pdf`.
+
+The window offers the most-used options: *Exact matches only*, *Fill colour* and the OCR *Language*. For the others (`--similarity`, `--dpi`, `--passes`, `--show-text`), use the command line. `PDFScript.pyw` must stay in the same folder as `remove_text.py`.
+
 ### Interactive
 
 ```bash
@@ -117,6 +128,14 @@ The result is saved as `NAME_cleaned.pdf` in `D:\Qbank Question` (created if mis
 - **The OCR runs on the CPU** and takes several seconds per page. Pages where something is erased are read twice.
 - **Only PDFs are accepted.** To clean a PNG or JPG, put it in a PDF first.
 - **Check the result** before you rely on it to hide sensitive information. OCR can miss text that is very small, blurry or stylised.
+
+## Tests
+
+```bash
+python -m unittest -v
+```
+
+The tests run the real OCR on `test_sample.pdf` and take about a minute.
 
 ## Requirements
 
