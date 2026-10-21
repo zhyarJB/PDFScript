@@ -33,6 +33,9 @@ try:
 except ImportError:
     sys.exit("RapidOCR is not installed. Run:  pip install rapidocr onnxruntime")
 
+# Folder cleaned PDFs are saved in when no -o is given.
+OUTPUT_DIR = Path(r"D:\AppDev\Qbank Question")
+
 # Longest side, in pixels, a page is rendered at for OCR. Bigger reads small
 # text better but needs more memory and time.
 MAX_SIDE = 4000
@@ -448,12 +451,11 @@ def collect_pdfs(paths):
 
 
 def output_path(src, out, many):
-    if out is None:
-        return src.with_name(f"{src.stem}_cleaned.pdf")
-    out = Path(out)
+    out = Path(out) if out else OUTPUT_DIR
     if many or out.is_dir() or out.suffix.lower() != ".pdf":
         out.mkdir(parents=True, exist_ok=True)
         return out / f"{src.stem}_cleaned.pdf"
+    out.parent.mkdir(parents=True, exist_ok=True)
     return out
 
 
@@ -464,7 +466,7 @@ def main():
     parser.add_argument("inputs", nargs="*", help="PDF files or folders of PDFs")
     parser.add_argument("-t", "--text", action="append", default=[],
                         help="word or sentence to delete (repeat -t for more than one)")
-    parser.add_argument("-o", "--output", help="output file (one input) or folder (default: NAME_cleaned.pdf)")
+    parser.add_argument("-o", "--output", help=f"output file (one input) or folder (default: {OUTPUT_DIR}\\NAME_cleaned.pdf)")
     parser.add_argument("--similarity", type=float, default=0.85,
                         help="how close the OCR text must be, 0-1 (default 0.85); 1 = exact only")
     parser.add_argument("--exact", action="store_const", const=1.0, dest="similarity",
