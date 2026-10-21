@@ -34,7 +34,7 @@ Try it on the included sample first:
 python remove_text.py test_sample.pdf -t "confidential" -t "do not share this"
 ```
 
-Then open `D:\AppDev\Qbank Question\test_sample_cleaned.pdf`. Your original file is never changed.
+Then open `D:\Qbank Question\test_sample_cleaned.pdf`. Your original file is never changed.
 
 ## Usage
 
@@ -62,7 +62,7 @@ python remove_text.py my_pdfs_folder -t "Draft"
 python remove_text.py report.pdf -t "Draft" -o clean/report.pdf
 ```
 
-The result is saved as `NAME_cleaned.pdf` in `D:\AppDev\Qbank Question` (created if missing), unless you pass `-o`. To change that folder, edit `OUTPUT_DIR` at the top of `remove_text.py`. Put paths that contain spaces in quotes.
+The result is saved as `NAME_cleaned.pdf` in `D:\Qbank Question` (created if missing), unless you pass `-o`. To change that folder, edit `OUTPUT_DIR` at the top of `remove_text.py`. Put paths that contain spaces in quotes.
 
 ### Recommended workflow for your own files
 
@@ -84,7 +84,7 @@ The result is saved as `NAME_cleaned.pdf` in `D:\AppDev\Qbank Question` (created
 | Option | What it does |
 |---|---|
 | `-t`, `--text TEXT` | Word or sentence to delete. Repeat it for more than one. |
-| `-o`, `--output PATH` | Output file (one input) or output folder (several inputs). Default: `D:\AppDev\Qbank Question`. |
+| `-o`, `--output PATH` | Output file (one input) or output folder (several inputs). Default: `D:\Qbank Question`. |
 | `--dry-run` | Only list what would be deleted. Nothing is written. |
 | `--show-text` | Print the text the OCR reads on each page. |
 | `--exact` | Only delete exact matches, with no OCR-mistake tolerance. |

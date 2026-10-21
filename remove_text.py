@@ -34,7 +34,7 @@ except ImportError:
     sys.exit("RapidOCR is not installed. Run:  pip install rapidocr onnxruntime")
 
 # Folder cleaned PDFs are saved in when no -o is given.
-OUTPUT_DIR = Path(r"D:\AppDev\Qbank Question")
+OUTPUT_DIR = Path(r"D:\Qbank Question")
 
 # Longest side, in pixels, a page is rendered at for OCR. Bigger reads small
 # text better but needs more memory and time.
