@@ -18,34 +18,56 @@ Give it a PDF and the text to remove. It reads each page with OCR, finds every m
 
 ## Installation
 
+### Windows app (no Python needed)
+
+1. Go to the [latest release](https://github.com/zhyarJB/PDFScript/releases/latest) and download **`PDFScript-windows.zip`** (about 125 MB).
+2. Right-click the zip, choose **Extract All...**, and open the extracted `PDFScript` folder.
+3. Double-click **`PDFScript.exe`**. Keep it inside that folder: it needs the `_internal` folder next to it.
+
+If Windows shows *"Windows protected your PC"*, click **More info → Run anyway**. That warning appears for any app that isn't code-signed. The first time you press **Preview** or **Remove text**, loading the OCR takes a few seconds.
+
+Then follow [Window (easiest)](#window-easiest) below, from step 1.
+
+### From the source code (Windows, macOS, Linux)
+
 You need **Python 3.10 or newer**. It was tested with Python 3.13 on Windows 11.
 
-```bash
-git clone https://github.com/zhyarJB/PDFScript.git
-cd PDFScript
-pip install -r requirements.txt
-```
+1. **Install Python** from [python.org](https://www.python.org/downloads/). On Windows, tick **"Add python.exe to PATH"** on the first screen of the installer, or the `pip` command below won't be found.
+2. **Get the code.** Either click the green **Code → Download ZIP** button on this page and extract it, or use Git:
+   ```bash
+   git clone https://github.com/zhyarJB/PDFScript.git
+   ```
+3. **Install the packages.** Open a terminal in the `PDFScript` folder and run:
+   ```bash
+   pip install -r requirements.txt
+   ```
+   On macOS and Linux, use `pip3` and `python3` instead of `pip` and `python`, here and in the commands below.
+
+The window needs Tkinter, which comes with Python from python.org. If you installed Python another way and the window won't open, install it with `brew install python-tk` (macOS, Homebrew) or `sudo apt install python3-tk` (Ubuntu/Debian).
 
 ## Quick start
 
-Try it on the included sample first:
+If you installed from the source code, try it on the included sample first:
 
 ```bash
 python remove_text.py test_sample.pdf -t "confidential" -t "do not share this"
 ```
 
-Then open `D:\Qbank Question\test_sample_cleaned.pdf`. Your original file is never changed.
+Then open `test_sample_cleaned.pdf`, saved in the same folder as the original. Your original file is never changed.
 
 ## Usage
 
 ### Window (easiest)
 
-Double-click **`PDFScript.pyw`**. If it opens in a text editor instead, right-click it and choose *Open with → Python*.
+Using the Windows app: double-click **`PDFScript.exe`**.
+
+From the source code on Windows: double-click **`PDFScript.pyw`**. If it opens in a text editor instead, right-click it and choose *Open with → Python*. On macOS and Linux, double-clicking doesn't run it; open a terminal in the folder and run `python3 PDFScript.pyw`.
 
 1. Choose a PDF with **File...**, or a whole folder of PDFs with **Folder...**.
 2. Type the words or sentences to delete, one per line.
-3. Press **Preview** to see what would be deleted. Nothing is written.
-4. Press **Remove text**, then **Open output folder** to find `NAME_cleaned.pdf`.
+3. Optionally pick a **Save to folder**. Leave it blank to save next to the original PDF.
+4. Press **Preview** to see what would be deleted. Nothing is written.
+5. Press **Remove text**, then **Open output folder** to find `NAME_cleaned.pdf`.
 
 The window offers the most-used options: *Exact matches only*, *Fill colour* and the OCR *Language*. For the others (`--similarity`, `--dpi`, `--passes`, `--show-text`), use the command line. `PDFScript.pyw` must stay in the same folder as `remove_text.py`.
 
@@ -73,7 +95,7 @@ python remove_text.py my_pdfs_folder -t "Draft"
 python remove_text.py report.pdf -t "Draft" -o clean/report.pdf
 ```
 
-The result is saved as `NAME_cleaned.pdf` in `D:\Qbank Question` (created if missing), unless you pass `-o`. To change that folder, edit `OUTPUT_DIR` at the top of `remove_text.py`. Put paths that contain spaces in quotes.
+The result is saved as `NAME_cleaned.pdf` in the same folder as the original, unless you pass `-o` (the folder is created if missing). Put paths that contain spaces in quotes.
 
 ### Recommended workflow for your own files
 
@@ -95,7 +117,7 @@ The result is saved as `NAME_cleaned.pdf` in `D:\Qbank Question` (created if mis
 | Option | What it does |
 |---|---|
 | `-t`, `--text TEXT` | Word or sentence to delete. Repeat it for more than one. |
-| `-o`, `--output PATH` | Output file (one input) or output folder (several inputs). Default: `D:\Qbank Question`. |
+| `-o`, `--output PATH` | Output file (one input) or output folder (several inputs). Default: `NAME_cleaned.pdf` next to the original. |
 | `--dry-run` | Only list what would be deleted. Nothing is written. |
 | `--show-text` | Print the text the OCR reads on each page. |
 | `--exact` | Only delete exact matches, with no OCR-mistake tolerance. |
@@ -136,6 +158,19 @@ python -m unittest -v
 ```
 
 The tests run the real OCR on `test_sample.pdf` and take about a minute.
+
+## Building the Windows app
+
+Build in a fresh virtual environment, so only what the app needs is bundled:
+
+```bash
+python -m venv .venv
+.venv\Scripts\activate
+pip install -r requirements.txt pyinstaller
+python build_exe.py
+```
+
+This creates `dist\PDFScript\PDFScript.exe` and `dist\PDFScript-windows.zip`. To publish it, create a new release on GitHub (**Releases → Draft a new release**) and attach the zip.
 
 ## Requirements
 

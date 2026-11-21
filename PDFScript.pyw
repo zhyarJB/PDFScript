@@ -146,8 +146,8 @@ class App:
         self.text = tk.Text(frame, height=5, wrap="word", undo=True, font="TkTextFont")
         self.text.grid(row=2, column=0, columnspan=3, sticky="nsew")
 
-        ttk.Label(frame, text="Save to folder").grid(row=3, column=0, sticky="w", pady=(12, 0))
-        self.out_dir = tk.StringVar(value=str(remove_text.OUTPUT_DIR))
+        ttk.Label(frame, text="Save to folder\n(blank = next to the PDF)").grid(row=3, column=0, sticky="w", pady=(12, 0))
+        self.out_dir = tk.StringVar()
         ttk.Entry(frame, textvariable=self.out_dir).grid(row=3, column=1, sticky="ew", padx=6, pady=(12, 0))
         ttk.Button(frame, text="Browse...", command=self.choose_out_dir).grid(
             row=3, column=2, sticky="ew", pady=(12, 0))
@@ -204,7 +204,7 @@ class App:
         except ValueError as error:
             messagebox.showerror("PDFScript", str(error), parent=self.root)
             return
-        out_dir = self.out_dir.get().strip().strip("\"'") or str(remove_text.OUTPUT_DIR)
+        out_dir = self.out_dir.get().strip().strip("\"'") or None
         options = make_options(self.exact.get(), self.fill.get(), dry_run)
         lang = LANGUAGES[self.language.get()]
 

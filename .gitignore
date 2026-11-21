@@ -1,3 +1,6 @@
 __pycache__/
 *.pyc
 *_cleaned.pdf
+dist/
+build/
+.venv/
